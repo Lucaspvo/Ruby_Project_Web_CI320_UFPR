@@ -52,9 +52,6 @@ def decide_command(command)
   if(command.instance_of?(Array))
   	sql_action = command[0].split(" ")[0]
     table = command[0].split(" ")[1]
-  else
-    sql_action = command.split(" ")[0]
-    table = command.split(" ")[1]
   end
   
   if(sql_action.downcase == "insere")
@@ -85,13 +82,36 @@ def decide_command(command)
   	values = query_info['values'].slice(0..-2).split(",")
 
   	columns.each_with_index do |elem, idx|
-  		sql_query += elem + "=" + values[idx] + " "
+  		sql_query += elem + "=" + values[idx] + " AND "
   	end
+
+  	sql_query = sql_query.slice(0..-6)
 
   	@connection.exec_query("DELETE FROM " + table +
   							" WHERE " + sql_query)
 
   elsif (sql_action.downcase == "altera")
+
+  	command = command[0].split(" ")
+
+  	comlumn_action = command[2]
+
+  	if(comlumn_action == "adiciona")
+
+  		@connection.exec_query("ALTER TABLE " + table +
+  								" ADD " + command[3] + " " + command[4])
+
+  	elsif(comlumn_action == "remove")
+
+  		@connection.exec_query("ALTER TABLE " + table +
+  								" DROP COLUMN " + command[3])
+
+  	elsif(comlumn_action == "altera")
+  		
+  		@connection.exec_query("ALTER TABLE " + table +
+  								" ALTER COLUMN " + command[3] + " TYPE " + command[4] + " USING " + command[3] + "::" + command[4])
+
+  	end
 
   end  	
   		
