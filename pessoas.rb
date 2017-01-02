@@ -14,6 +14,8 @@ ActiveRecord::Base.establish_connection :adapter => "postgresql",
 
 
 class Pessoa < ActiveRecord::Base; 
+	belongs_to    :car
+	belongs_to    :enterprise
 end
 
 # O bacana aqui é que não foram declarados os atributos da classe

@@ -5,8 +5,6 @@
 require 'rubygems'
 require 'active_record'
 
-gem 'pg'
-
 # As duas linhas abaixo indicam o SGBD a ser usado (sqlite3) e o nome
 # do arquivo que contém o banco de dados (Aulas.sqlite3)
 ActiveRecord::Base.establish_connection :adapter => "postgresql",
@@ -17,11 +15,45 @@ ActiveRecord::Base.establish_connection :adapter => "postgresql",
 # As linhas abaixo criam a tabela "pessoas" dentro do banco
 # "Aulas.sqlite3", indicando os atributos e os seus tipos. No caso,
 # todos são "string", mas tem várias outras oportunidades.
+
+#Create pessoas table
 ActiveRecord::Base.connection.create_table :pessoas do |t|  
   t.string   :last_name 
   t.string   :first_name 
   t.string   :address 
   t.string   :city 
+  t.integer  :car_id
+  t.integer  :enterprise_id
+end
+
+#Create cars table
+ActiveRecord::Base.connection.create_table :cars do |t|  
+  t.string   :name 
+  t.string   :color 
+  t.integer  :year 
+  t.string   :brand 
+end
+
+#Create enterprises table
+ActiveRecord::Base.connection.create_table :enterprises do |t|  
+  t.string   :name 
+  t.integer  :CNPJ 
+  t.string   :logo 
+  t.string   :address 
+  t.integer  :num_employees
+end
+
+#Create providers table
+ActiveRecord::Base.connection.create_table :providers do |t|  
+  t.string   :name 
+  t.integer  :CNPJ 
+  t.string   :product 
+  t.string   :address 
+end
+
+ActiveRecord::Base.connection.create_table :enterprises_providers, :id => false do |t|  
+  t.integer   :enterprise_id 
+  t.integer   :provider_id
 end
 
 # Sugestão de bibliografia:
